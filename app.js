@@ -1,9 +1,22 @@
 const puppeteer = require('puppeteer');
 
 const App = async () => {
-  // Launch browser and go to Pão de Açúcar's page
+  // Launch browser
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
+  // Disable images to load faster
+  await page.setRequestInterception(true);
+    
+    page.on('request', (req) => {
+        if(req.resourceType() == 'image'){
+            req.abort();
+        }
+        else {
+            req.continue();
+        }
+    });
+  
+  // Navigate to Pão de Açúcar's page
   await page.goto('https://www.paodeacucar.com/busca?qt=12&s=title&p=1&gt=list');
   await page.waitFor(5000);
 
