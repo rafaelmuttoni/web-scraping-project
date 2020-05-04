@@ -16,7 +16,12 @@ const App = async () => {
   const productNameTxt = await productNameEl.getProperty('textContent');
   const productNameFull = await productNameTxt.jsonValue();
   const productName = productNameFull.trim();
-  console.log({productName});
+
+  const productPriceEl = await page.$('p.normal-price');
+  const productPriceTxt = await productPriceEl.getProperty('textContent');
+  const productPriceFull = await productPriceTxt.jsonValue();
+  const productPrice = productPriceFull.trim();
+  console.log({productName, productPrice});
 
   // Testing with screenshot
   await page.screenshot({path: 'test.png'});
