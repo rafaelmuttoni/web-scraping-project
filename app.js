@@ -11,6 +11,13 @@ const App = async () => {
   await searchButton.click();
   await page.waitFor(5000);
 
+  // Getting a product name and price
+  const productNameEl = await page.$('p.product-description');
+  const productNameTxt = await productNameEl.getProperty('textContent');
+  const productNameFull = await productNameTxt.jsonValue();
+  const productName = productNameFull.trim();
+  console.log({productName});
+
   // Testing with screenshot
   await page.screenshot({path: 'test.png'});
 
