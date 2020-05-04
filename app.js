@@ -2,26 +2,37 @@ const puppeteer = require('puppeteer');
 
 const App = async () => {
   // Launch browser and go to Pão de Açúcar's page
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto('https://www.paodeacucar.com/');
-
-  // Go to Search page
-  const [ searchButton ] = await page.$x('//*[@id="light-header"]/div[5]/div[2]/div/div[2]/search/div/form/div/div/div/span/button');
-  await searchButton.click();
+  await page.goto('https://www.paodeacucar.com/busca?qt=12&s=title&p=1&gt=list');
   await page.waitFor(5000);
 
-  // Getting a product name and price
-  const productNameEl = await page.$('p.product-description');
-  const productNameTxt = await productNameEl.getProperty('textContent');
-  const productNameFull = await productNameTxt.jsonValue();
-  const productName = productNameFull.trim();
+  // Getting all products names and prices
+  let productsData = await page.evaluate(() => {
+    let products = [];
+    // Get all products elements
+    let prodsElms = document.querySelectorAll('div.thumbnail');
+    // Loop over product and get its data
+    prodsElms.forEach(prodEl => {
+      let prodJson = {};
+      try {
+        prodJson.name = prodEl.querySelector('p.product-description').textContent.trim();
+        if (prodEl.querySelector('p.discount-price')) {
+          prodJson.oldPrice = prodEl.querySelector('s.ng-binding').textContent.trim();
+          prodJson.discountPrice = prodEl.querySelector('p.discount-price').textContent.trim();
+        } else {
+          prodJson.price = prodEl.querySelector('p.normal-price').textContent.trim();
+        }
+      }
+      catch (err) {
 
-  const productPriceEl = await page.$('p.normal-price');
-  const productPriceTxt = await productPriceEl.getProperty('textContent');
-  const productPriceFull = await productPriceTxt.jsonValue();
-  const productPrice = productPriceFull.trim();
-  console.log({productName, productPrice});
+      }
+      products.push(prodJson);
+    });
+    return products;
+  })
+
+  console.dir(productsData);
 
   // Testing with screenshot
   await page.screenshot({path: 'test.png'});
