@@ -1,0 +1,10 @@
+{
+  "name": "desafio-zaply",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rafael Muttoni <rmuttonic@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "2.1.0"
+  }
+}
