@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const App = async () => {
   // Launch browser
@@ -17,7 +18,7 @@ const App = async () => {
     });
   
   // Navigate to Pão de Açúcar's page
-  await page.goto('https://www.paodeacucar.com/busca?qt=12&s=title&p=1&gt=list');
+  await page.goto('https://www.paodeacucar.com/busca');
   await page.waitFor(5000);
 
   // Getting all products names and prices
@@ -46,6 +47,14 @@ const App = async () => {
   })
 
   console.dir(productsData);
+
+  const productsString = JSON.stringify(productsData);
+
+  // Write txt file
+  fs.writeFile("products.txt", productsString, (err) => {
+    if (err) throw err;
+    console.log('The file has been saved');
+  })
 
   // Testing with screenshot
   await page.screenshot({path: 'test.png'});
