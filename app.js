@@ -9,18 +9,19 @@ const App = async () => {
   await page.setRequestInterception(true);
     
     page.on('request', (req) => {
-        if(req.resourceType() == 'image'){
+        if(req.resourceType() == 'stylesheet' || req.resourceType() == 'image'){
             req.abort();
         }
         else {
             req.continue();
         }
     });
-  
-  // Navigate to Pão de Açúcar's page
-  await page.goto('https://www.paodeacucar.com/busca');
-  await page.waitFor(5000);
 
+    
+  // Navigate to Pão de Açúcar's page
+  await page.goto('https://www.paodeacucar.com/secoes/C7207/carnes-maturatta?qt=12&p=0&gt=list');
+  await page.waitFor(5000);
+    
   // Scroll to bottom of the page
   await page.evaluate(scrollToBottom);
 
@@ -64,7 +65,7 @@ const App = async () => {
 // Scroll script
 async function scrollToBottom() {
   await new Promise(resolve => {
-    const distance = 100; // should be less than or equal to window.innerHeight
+    const distance = 100;
     const delay = 100;
     const timer = setInterval(() => {
       document.scrollingElement.scrollBy(0, distance);
