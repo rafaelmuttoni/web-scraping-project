@@ -36,7 +36,7 @@ const App = async () => {
       try {
         prodJson.name = prodEl.querySelector('p.product-description').textContent.trim();
         if (prodEl.querySelector('p.discount-price')) {
-          prodJson.oldPrice = prodEl.querySelector('s.ng-binding').textContent.trim();
+          prodJson.price = prodEl.querySelector('s.ng-binding').textContent.trim();
           prodJson.discountPrice = prodEl.querySelector('p.discount-price').textContent.trim();
         } else {
           prodJson.price = prodEl.querySelector('p.normal-price').textContent.trim();
