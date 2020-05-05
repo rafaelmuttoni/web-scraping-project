@@ -49,17 +49,12 @@ const App = async () => {
     return products;
   })
 
-  console.dir(productsData);
-
   // Write txt file
   const productsString = JSON.stringify(productsData);
   fs.writeFile("products.txt", productsString, (err) => {
     if (err) throw err;
     console.log('The file has been saved');
   })
-
-  // Testing with screenshot
-  await page.screenshot({path: 'test.png'});
 
   // Closing app
   console.log('Done');
