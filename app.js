@@ -19,8 +19,8 @@ const App = async () => {
     });
 
     
-  // Navigate to Pão de Açúcar's page
-  await page.goto('https://www.paodeacucar.com/busca?qt=12&s=title&p=1&gt=list');
+  // Select category page and navigate to it
+  await page.goto('https://www.paodeacucar.com/secoes/4205/feira?qt=12&p=0&gt=list');
   await page.waitFor(5000);
     
   // Scroll to bottom of the page
@@ -29,6 +29,9 @@ const App = async () => {
   // Getting all products names and prices
   let productsData = await page.evaluate(() => {
     let products = [];
+    // Get products category
+    let breadcrumb = document.querySelector('ol.breadcrumb');
+    let category = breadcrumb.querySelector('li.active');
     // Get all products elements
     let prodsElms = document.querySelectorAll('div.thumbnail');
     // Loop over product and get its data
@@ -36,6 +39,7 @@ const App = async () => {
       let prodJson = {};
       try {
         prodJson.name = prodEl.querySelector('p.product-description').textContent.trim();
+        prodJson.category = category.textContent.trim();
         if (prodEl.querySelector('p.discount-price')) {
           prodJson.price = prodEl.querySelector('s.ng-binding').textContent.trim();
           prodJson.discountPrice = prodEl.querySelector('p.discount-price').textContent.trim();
