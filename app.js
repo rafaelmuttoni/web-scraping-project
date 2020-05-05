@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const XLSX = require('xlsx');
 
 const App = async () => {
   // Launch browser
@@ -50,9 +51,15 @@ const App = async () => {
     return products;
   })
 
+  // Write excel file
+  const excelData = XLSX.utils.json_to_sheet(productsData);
+  const excelSheet = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(excelSheet, excelData, 'PDA Data');
+  XLSX.writeFile(excelSheet, 'PDAData.xlsx');
+
   // Write txt file
   const productsString = JSON.stringify(productsData);
-  fs.writeFile("products.txt", productsString, (err) => {
+  fs.writeFile("PDAData.txt", productsString, (err) => {
     if (err) throw err;
     console.log('The file has been saved');
   })
