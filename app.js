@@ -6,7 +6,7 @@ const Crawler = async (section) => {
   // Launch browser
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  // Disable images to load faster
+  // Disable images and css to load page faster
   await page.setRequestInterception(true);
     
     page.on('request', (req) => {
@@ -19,22 +19,22 @@ const Crawler = async (section) => {
     });
 
     
-  // Select category page and navigate to it
+  // Go to category page
   await page.goto(`https://www.paodeacucar.com/secoes/${section}/`);
   await page.waitFor(5000);
     
-  // Scroll to bottom of the page
+  // Scroll to the bottom of the page
   await page.evaluate(scrollToBottom);
 
-  // Getting all products names and prices
+  // Gathering all products' data (names and price)
   let productsData = await page.evaluate(() => {
     let products = [];
     // Get products category
     let breadcrumb = document.querySelector('ol.breadcrumb');
     let category = breadcrumb.querySelector('li.active');
-    // Get all products elements
+    // Get all products' elements
     let prodsElms = document.querySelectorAll('div.thumbnail');
-    // Loop over product and get its data
+    // Loop over all products and get each product's data
     prodsElms.forEach(prodEl => {
       let prodJson = {};
       try {
@@ -92,6 +92,8 @@ async function scrollToBottom() {
     }, delay);
   });
 }
+
+// App that executes crawler in each Category 
 
 const sections = ['C7207', 'C4233', 'C4215', 'C4226', 'C4229', 'C4223', 'C4231', 'C4205', 'C4222', 'C4227'];
 
