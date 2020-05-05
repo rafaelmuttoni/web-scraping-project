@@ -20,7 +20,7 @@ const App = async () => {
 
     
   // Navigate to Pão de Açúcar's page
-  await page.goto('https://www.paodeacucar.com/secoes/C7207/carnes-maturatta?qt=12&p=0&gt=list');
+  await page.goto('https://www.paodeacucar.com/busca?qt=12&s=title&p=1&gt=list');
   await page.waitFor(5000);
     
   // Scroll to bottom of the page

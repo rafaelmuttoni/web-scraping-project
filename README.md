@@ -18,7 +18,7 @@
   WEB SCRAPING PROJECT :robot:
 </h1>
 
-<p>A Web Scraping App that gathers data from Pão de Açúcar's website and export it to a TXT and XLSX file.</p>
+<p>A Web Scraping App that gathers all products' data (name and price) from Pão de Açúcar's website and export it to a TXT and XLSX file.</p>
 
 ## :rocket: Technologies
 
