@@ -21,6 +21,9 @@ const App = async () => {
   await page.goto('https://www.paodeacucar.com/busca');
   await page.waitFor(5000);
 
+  // Scroll to bottom of the page
+  await page.evaluate(scrollToBottom);
+
   // Getting all products names and prices
   let productsData = await page.evaluate(() => {
     let products = [];
@@ -48,9 +51,8 @@ const App = async () => {
 
   console.dir(productsData);
 
-  const productsString = JSON.stringify(productsData);
-
   // Write txt file
+  const productsString = JSON.stringify(productsData);
   fs.writeFile("products.txt", productsString, (err) => {
     if (err) throw err;
     console.log('The file has been saved');
@@ -63,5 +65,20 @@ const App = async () => {
   console.log('Done');
   await browser.close();
 };
+
+// Scroll script
+async function scrollToBottom() {
+  await new Promise(resolve => {
+    const distance = 100; // should be less than or equal to window.innerHeight
+    const delay = 100;
+    const timer = setInterval(() => {
+      document.scrollingElement.scrollBy(0, distance);
+      if (document.scrollingElement.scrollTop + window.innerHeight >= document.scrollingElement.scrollHeight) {
+        clearInterval(timer);
+        resolve();
+      }
+    }, delay);
+  });
+}
 
 App();
